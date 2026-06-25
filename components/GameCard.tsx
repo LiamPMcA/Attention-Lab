@@ -5,9 +5,16 @@ type GameCardProps = {
   description: string;
   href: string;
   metric: string;
+  badge?: string | null;
 };
 
-export default function GameCard({ title, description, href, metric }: GameCardProps) {
+export default function GameCard({
+  title,
+  description,
+  href,
+  metric,
+  badge = "Placeholder",
+}: GameCardProps) {
   return (
     <Link
       href={href}
@@ -15,9 +22,11 @@ export default function GameCard({ title, description, href, metric }: GameCardP
     >
       <div className="mb-3 flex items-center justify-between">
         <h2 className="text-xl font-semibold text-zinc-900">{title}</h2>
-        <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600">
-          Placeholder
-        </span>
+        {badge && (
+          <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600">
+            {badge}
+          </span>
+        )}
       </div>
       <p className="mb-4 flex-1 text-sm leading-6 text-zinc-600">{description}</p>
       <p className="text-xs font-medium uppercase tracking-wide text-teal-700">
