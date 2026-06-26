@@ -13,9 +13,10 @@ const games = [
   {
     title: "Capture",
     description:
-      "See what grabs your attention when distractors compete with your target.",
+      "Tap the blue target while red, moving, and fake distractors try to pull you off course.",
     href: "/lab/capture",
     metric: "Attention Capture Score",
+    badge: "Live",
   },
   {
     title: "Switch",
