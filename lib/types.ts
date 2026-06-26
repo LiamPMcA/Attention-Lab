@@ -18,15 +18,22 @@ export type ShapeKind =
   | "distractor-fake"
   | "distractor-moving";
 
+export type ShapeVariant = "circle" | "square" | "diamond" | "triangle";
+
 export type ArenaShape = {
   id: string;
   kind: ShapeKind;
+  variant: ShapeVariant;
   isTarget: boolean;
   x: number;
   y: number;
   size: number;
+  rotation?: number;
   vx?: number;
   vy?: number;
+  wobblePhase?: number;
+  wobbleSpeed?: number;
+  erraticTimer?: number;
 };
 
 export type CaptureTrialOutcome = TrialOutcome & {

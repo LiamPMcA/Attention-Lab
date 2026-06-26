@@ -59,8 +59,8 @@ export default function CaptureGame() {
       </p>
       <h1 className="mb-2 text-3xl font-bold tracking-tight">Tap the blue target</h1>
       <p className="mb-8 text-zinc-600">
-        Only the solid blue circle is the target. Ignore red shapes, moving
-        shapes, and fake blue decoys.
+        Only the solid blue circle is the target. Ignore red shapes in all forms,
+        erratic movers, and fake blue decoys.
       </p>
 
       {phase === "idle" && (

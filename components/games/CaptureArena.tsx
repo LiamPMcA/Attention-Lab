@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { ArenaShape, TrialPhase } from "@/lib/types";
 
 type CaptureArenaProps = {
@@ -10,24 +10,123 @@ type CaptureArenaProps = {
   onShapeTap: (shapeId: string) => void;
 };
 
-function shapeClassName(shape: ArenaShape): string {
-  const base =
-    "absolute rounded-full touch-manipulation shadow-sm transition-transform active:scale-95";
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
+}
 
+function colorClassName(shape: ArenaShape): string {
   switch (shape.kind) {
     case "target":
-      return `${base} bg-blue-600 ring-2 ring-blue-900/20`;
+      return "bg-blue-600 ring-2 ring-blue-900/20";
     case "distractor-fake":
-      return `${base} bg-blue-400 ring-2 ring-dashed ring-white/90`;
+      return "bg-blue-400 ring-2 ring-dashed ring-white/90";
     case "distractor-red-static":
-      return `${base} bg-red-500`;
+      return "bg-red-500";
     case "distractor-red-flash":
-      return `${base} animate-pulse bg-red-500`;
+      return "animate-pulse bg-red-500";
     case "distractor-moving":
-      return `${base} bg-orange-500`;
+      return "bg-orange-500";
     default:
-      return base;
+      return "bg-zinc-500";
   }
+}
+
+function variantClassName(variant: ArenaShape["variant"]): string {
+  switch (variant) {
+    case "circle":
+      return "rounded-full";
+    case "square":
+      return "rounded-md";
+    case "diamond":
+      return "rounded-sm";
+    case "triangle":
+      return "rounded-none";
+    default:
+      return "rounded-full";
+  }
+}
+
+function shapeStyle(shape: ArenaShape): CSSProperties {
+  const style: CSSProperties = {
+    left: `${shape.x}%`,
+    top: `${shape.y}%`,
+    width: shape.size,
+    height: shape.size,
+    transform: `translate(-50%, -50%) rotate(${shape.rotation ?? 0}deg)`,
+  };
+
+  if (shape.variant === "triangle") {
+    style.clipPath = "polygon(50% 0%, 0% 100%, 100% 100%)";
+  }
+
+  if (shape.variant === "diamond") {
+    style.transform = `translate(-50%, -50%) rotate(${45 + (shape.rotation ?? 0)}deg)`;
+  }
+
+  return style;
+}
+
+function updateMovingShape(shape: ArenaShape): ArenaShape {
+  if (shape.kind !== "distractor-moving" || shape.vx === undefined) {
+    return shape;
+  }
+
+  let x = shape.x;
+  let y = shape.y;
+  let vx = shape.vx;
+  let vy = shape.vy ?? 0;
+  let wobblePhase = (shape.wobblePhase ?? 0) + (shape.wobbleSpeed ?? 0.15);
+  let erraticTimer = (shape.erraticTimer ?? 15) - 1;
+  let rotation = (shape.rotation ?? 0) + randomSpin(vx, vy);
+
+  if (erraticTimer <= 0) {
+    vx += (Math.random() - 0.5) * 0.35;
+    vy += (Math.random() - 0.5) * 0.35;
+
+    if (Math.random() < 0.35) {
+      const jerkAngle = Math.random() * Math.PI * 2;
+      vx += Math.cos(jerkAngle) * 0.22;
+      vy += Math.sin(jerkAngle) * 0.22;
+    }
+
+    vx = clamp(vx, -0.42, 0.42);
+    vy = clamp(vy, -0.42, 0.42);
+    erraticTimer = 6 + Math.floor(Math.random() * 18);
+  }
+
+  const wobbleX = Math.sin(wobblePhase) * 0.14 + Math.sin(wobblePhase * 2.7) * 0.05;
+  const wobbleY =
+    Math.cos(wobblePhase * 1.4) * 0.14 + Math.cos(wobblePhase * 3.1) * 0.05;
+
+  x += vx + wobbleX;
+  y += vy + wobbleY;
+
+  if (x < 10 || x > 90) {
+    vx = -vx * (0.85 + Math.random() * 0.3);
+    x = clamp(x, 10, 90);
+    erraticTimer = Math.min(erraticTimer, 4);
+  }
+  if (y < 10 || y > 90) {
+    vy = -vy * (0.85 + Math.random() * 0.3);
+    y = clamp(y, 10, 90);
+    erraticTimer = Math.min(erraticTimer, 4);
+  }
+
+  return {
+    ...shape,
+    x,
+    y,
+    vx,
+    vy,
+    wobblePhase,
+    erraticTimer,
+    rotation,
+  };
+}
+
+function randomSpin(vx: number, vy: number): number {
+  const speed = Math.hypot(vx, vy);
+  return speed * 18 + (Math.random() - 0.5) * 4;
 }
 
 export default function CaptureArena({
@@ -61,27 +160,9 @@ export default function CaptureArena({
     const tick = () => {
       if (!running) return;
 
-      liveShapesRef.current = liveShapesRef.current.map((shape) => {
-        if (shape.kind !== "distractor-moving" || shape.vx === undefined) {
-          return shape;
-        }
-
-        let x = shape.x + shape.vx;
-        let y = shape.y + (shape.vy ?? 0);
-        let vx = shape.vx;
-        let vy = shape.vy ?? 0;
-
-        if (x < 10 || x > 90) {
-          vx = -vx;
-          x = Math.min(90, Math.max(10, x));
-        }
-        if (y < 10 || y > 90) {
-          vy = -vy;
-          y = Math.min(90, Math.max(10, y));
-        }
-
-        return { ...shape, x, y, vx, vy };
-      });
+      liveShapesRef.current = liveShapesRef.current.map((shape) =>
+        shape.kind === "distractor-moving" ? updateMovingShape(shape) : shape,
+      );
 
       setLiveShapes([...liveShapesRef.current]);
       frameRef.current = requestAnimationFrame(tick);
@@ -120,14 +201,8 @@ export default function CaptureArena({
               event.preventDefault();
               onShapeTap(shape.id);
             }}
-            className={shapeClassName(shape)}
-            style={{
-              left: `${shape.x}%`,
-              top: `${shape.y}%`,
-              width: shape.size,
-              height: shape.size,
-              transform: "translate(-50%, -50%)",
-            }}
+            className={`absolute touch-manipulation shadow-sm transition-transform active:scale-95 ${colorClassName(shape)} ${variantClassName(shape.variant)}`}
+            style={shapeStyle(shape)}
           />
         ))}
 

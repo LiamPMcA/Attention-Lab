@@ -1,11 +1,26 @@
 import { getCaptureLevel } from "@/lib/capture/levels";
-import type { ArenaShape, ShapeKind } from "@/lib/types";
+import type { ArenaShape, ShapeKind, ShapeVariant } from "@/lib/types";
 
 const SHAPE_SIZE = 56;
 const MIN_DISTANCE = 18;
 
+const DISTRACTOR_VARIANTS: ShapeVariant[] = [
+  "circle",
+  "square",
+  "diamond",
+  "triangle",
+];
+
 function randomBetween(min: number, max: number): number {
   return min + Math.random() * (max - min);
+}
+
+function randomInt(min: number, max: number): number {
+  return Math.floor(randomBetween(min, max + 1));
+}
+
+function pickVariant(variants: ShapeVariant[]): ShapeVariant {
+  return variants[randomInt(0, variants.length - 1)];
 }
 
 function overlaps(x: number, y: number, placed: { x: number; y: number }[]): boolean {
@@ -27,6 +42,16 @@ function randomPosition(placed: { x: number; y: number }[]): { x: number; y: num
   return { x: randomBetween(12, 88), y: randomBetween(12, 88) };
 }
 
+function assignErraticMotion(shape: ArenaShape): void {
+  const angle = randomBetween(0, Math.PI * 2);
+  const speed = randomBetween(0.14, 0.28);
+  shape.vx = Math.cos(angle) * speed;
+  shape.vy = Math.sin(angle) * speed;
+  shape.wobblePhase = randomBetween(0, Math.PI * 2);
+  shape.wobbleSpeed = randomBetween(0.12, 0.28);
+  shape.erraticTimer = randomInt(6, 20);
+}
+
 function createShape(
   kind: ShapeKind,
   isTarget: boolean,
@@ -35,18 +60,25 @@ function createShape(
   const { x, y } = randomPosition(placed);
   placed.push({ x, y });
 
+  const variant: ShapeVariant = isTarget
+    ? "circle"
+    : kind === "distractor-fake"
+      ? pickVariant(["circle", "square"])
+      : pickVariant(DISTRACTOR_VARIANTS);
+
   const shape: ArenaShape = {
     id: crypto.randomUUID(),
     kind,
+    variant,
     isTarget,
     x,
     y,
     size: SHAPE_SIZE,
+    rotation: variant === "circle" ? 0 : randomBetween(0, 360),
   };
 
   if (kind === "distractor-moving") {
-    shape.vx = randomBetween(-0.08, 0.08) * (Math.random() > 0.5 ? 1 : -1);
-    shape.vy = randomBetween(-0.08, 0.08) * (Math.random() > 0.5 ? 1 : -1);
+    assignErraticMotion(shape);
   }
 
   return shape;
