@@ -17,30 +17,18 @@ function centerColor(phase: string, lastOutcome: RecoverTrialOutcome | null): st
 
 function phaseMessage(
   phase: string,
-  probeType: string,
   lastOutcome: RecoverTrialOutcome | null,
-  distractionFalseTap: boolean,
 ): string {
-  if (phase === "ready") {
-    return probeType === "recovery"
-      ? "Stay focused — distraction coming…"
-      : "Wait for green…";
-  }
-  if (phase === "distraction") return "Ignore this — don't tap";
-  if (phase === "pause") return "Get ready to tap green…";
+  if (phase === "ready" || phase === "pause") return "Wait for green…";
   if (phase === "stimulus") return "Tap now!";
   if (phase === "feedback" && lastOutcome?.falseStart) {
     return "Too early — wait for green";
   }
   if (phase === "feedback" && lastOutcome?.miss) return "Too slow — missed green";
-  if (phase === "feedback" && lastOutcome?.distractionFalseTap && lastOutcome.accuracy > 0) {
-    return `Recovered in ${lastOutcome.reactionTime}ms (tapped during distraction)`;
-  }
   if (phase === "feedback" && lastOutcome && lastOutcome.reactionTime > 0) {
     return `Reaction time: ${lastOutcome.reactionTime}ms`;
   }
   if (phase === "complete") return "Session complete";
-  if (distractionFalseTap) return "Don't tap during distractions";
   return "";
 }
 
@@ -53,7 +41,7 @@ function DistractionOverlay({
 }) {
   if (kind === "flash") {
     return (
-      <div className="absolute inset-0 flex items-center justify-center bg-red-500/90">
+      <div className="absolute inset-0 flex items-center justify-center bg-red-500/95">
         <span className="text-4xl font-bold text-white">!</span>
       </div>
     );
@@ -70,10 +58,11 @@ function DistractionOverlay({
   }
 
   return (
-    <div className="absolute inset-0 overflow-hidden bg-fuchsia-600/90">
-      <span className="absolute left-[15%] top-[20%] h-10 w-10 rounded-full bg-yellow-300" />
-      <span className="absolute right-[20%] top-[30%] h-8 w-8 rotate-45 bg-white" />
-      <span className="absolute bottom-[25%] left-[35%] h-12 w-12 rounded-sm bg-orange-400" />
+    <div className="absolute inset-0 overflow-hidden bg-fuchsia-600/95">
+      <span className="absolute left-[12%] top-[18%] h-12 w-12 rounded-full bg-yellow-300" />
+      <span className="absolute right-[18%] top-[28%] h-10 w-10 rotate-45 bg-white" />
+      <span className="absolute bottom-[22%] left-[32%] h-14 w-14 rounded-sm bg-orange-400" />
+      <span className="absolute bottom-[30%] right-[28%] h-8 w-16 rounded-full bg-lime-300" />
       <span className="absolute inset-0 flex items-center justify-center text-3xl font-bold text-white">
         {label}
       </span>
@@ -86,12 +75,10 @@ export default function RecoverGame() {
   const {
     phase,
     probeIndex,
-    probeType,
     totalProbes,
     outcomes,
     lastOutcome,
     distraction,
-    distractionFalseTap,
     startSession,
     handleTap,
     resetSession,
@@ -112,12 +99,9 @@ export default function RecoverGame() {
     resetSession();
   };
 
-  const message = phaseMessage(
-    phase,
-    probeType,
-    lastOutcome,
-    distractionFalseTap,
-  );
+  const message = phaseMessage(phase, lastOutcome);
+  const showCenter =
+    phase === "ready" || phase === "pause" || phase === "stimulus" || phase === "feedback";
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
@@ -126,9 +110,8 @@ export default function RecoverGame() {
       </p>
       <h1 className="mb-2 text-3xl font-bold tracking-tight">Tap when green</h1>
       <p className="mb-8 text-zinc-600">
-        Wait for the center circle to turn green and tap fast. Full-screen
-        distractions will try to pull you off — ignore them, then recover on the
-        next green flash.
+        Wait for the center circle to turn green and tap fast. Distractions can
+        appear at any time — stay on task and recover on the next green flash.
       </p>
 
       {phase === "idle" && (
@@ -146,11 +129,7 @@ export default function RecoverGame() {
           <div className="flex items-center justify-between text-sm text-zinc-600">
             <span>
               Probe {Math.min(probeIndex + 1, totalProbes)} of {totalProbes}
-              <span className="ml-2 rounded-full bg-zinc-200 px-2 py-0.5 text-xs capitalize">
-                {probeType}
-              </span>
             </span>
-            <span className="capitalize">{phase}</span>
           </div>
 
           <button
@@ -167,27 +146,17 @@ export default function RecoverGame() {
               />
             )}
 
-            {phase !== "distraction" && (
+            {showCenter && (
               <>
                 <span
                   className={`relative z-10 mb-4 h-28 w-28 rounded-full transition-colors ${centerColor(phase, lastOutcome)}`}
                 />
-                <span className="relative z-10 text-lg font-medium text-zinc-800">
-                  {message}
-                </span>
+                {message && (
+                  <span className="relative z-10 text-lg font-medium text-zinc-800">
+                    {message}
+                  </span>
+                )}
               </>
-            )}
-
-            {phase === "distraction" && (
-              <span className="relative z-10 text-lg font-medium text-white">
-                {message}
-              </span>
-            )}
-
-            {distractionFalseTap && phase === "distraction" && (
-              <span className="absolute bottom-4 z-10 text-sm font-medium text-white/90">
-                Don&apos;t tap!
-              </span>
             )}
           </button>
         </div>

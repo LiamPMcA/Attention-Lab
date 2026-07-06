@@ -128,7 +128,7 @@ export function useRecoverSession() {
 
   const beginDistraction = useCallback(
     (probeIndex: number, probeType: RecoverProbeType) => {
-      const distraction = getDistraction(probeIndex);
+      const distraction = getDistraction();
       distractionFalseTapRef.current = false;
 
       setState((current) => ({
@@ -176,7 +176,10 @@ export function useRecoverSession() {
         distractionFalseTap: false,
       }));
 
-      const delay = randomDelay(500, 1200);
+      const delay =
+        probeType === "recovery"
+          ? randomDelay(280, 2200)
+          : randomDelay(500, 1200);
       timeoutRef.current = setTimeout(() => {
         if (probeType === "recovery") {
           beginDistraction(probeIndex, probeType);
