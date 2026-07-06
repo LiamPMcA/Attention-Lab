@@ -57,6 +57,16 @@ export type RecoverTrialOutcome = TrialOutcome & {
   distractionFalseTap?: boolean;
 };
 
+export type SwitchRule = "odd" | "vowel";
+
+export type SwitchTrialOutcome = TrialOutcome & {
+  rule: SwitchRule;
+  isSwitchTrial: boolean;
+  stimulus: string;
+  respondedMatch: boolean;
+  correct: boolean;
+};
+
 export type SessionScore = {
   id: string;
   gameId: GameId;
@@ -66,4 +76,6 @@ export type SessionScore = {
   trials: number;
   baselineRt?: number;
   recoveryRt?: number;
+  repeatRt?: number;
+  switchRt?: number;
 };

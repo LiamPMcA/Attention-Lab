@@ -21,9 +21,10 @@ const games = [
   {
     title: "Switch",
     description:
-      "Practice moving attention from one rule to another as quickly as you can.",
+      "Alternate between odd numbers and vowels — Match or Skip as the rule changes.",
     href: "/lab/switch",
     metric: "Switching Score",
+    badge: "Live",
   },
 ];
 

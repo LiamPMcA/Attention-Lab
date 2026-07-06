@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { captureScore } from "@/lib/capture/score";
 import { recoverScore } from "@/lib/recover/score";
+import { switchScore } from "@/lib/switch/score";
 import { getLatestSession, getSessionsByGame } from "@/lib/storage";
 import type { SessionScore } from "@/lib/types";
 
@@ -28,17 +29,27 @@ function formatRecoverScore(session: SessionScore | null) {
   return score !== null ? String(score) : "—";
 }
 
+function formatSwitchScore(session: SessionScore | null) {
+  if (!session) return "—";
+  const score = switchScore(session);
+  return score !== null ? String(score) : "—";
+}
+
 export default function ResultsProfile() {
   const [capture, setCapture] = useState<SessionScore | null>(null);
   const [recover, setRecover] = useState<SessionScore | null>(null);
+  const [switchSession, setSwitchSession] = useState<SessionScore | null>(null);
   const [captureHistory, setCaptureHistory] = useState<SessionScore[]>([]);
   const [recoverHistory, setRecoverHistory] = useState<SessionScore[]>([]);
+  const [switchHistory, setSwitchHistory] = useState<SessionScore[]>([]);
 
   useEffect(() => {
     setCapture(getLatestSession("capture"));
     setRecover(getLatestSession("recover"));
+    setSwitchSession(getLatestSession("switch"));
     setCaptureHistory(getSessionsByGame("capture"));
     setRecoverHistory(getSessionsByGame("recover"));
+    setSwitchHistory(getSessionsByGame("switch"));
   }, []);
 
   return (
@@ -64,11 +75,17 @@ export default function ResultsProfile() {
         </div>
         <div className="rounded-xl border border-zinc-200 bg-white p-6">
           <p className="text-sm font-medium text-zinc-600">Switching</p>
-          <p className="mt-2 text-3xl font-bold text-zinc-900">—</p>
+          <p className="mt-2 text-3xl font-bold text-zinc-900">
+            {formatSwitchScore(switchSession)}
+          </p>
+          <p className="mt-1 text-xs text-zinc-500">
+            {switchSession?.reactionTime ?? "—"} cost · {formatAccuracy(switchSession)}{" "}
+            accuracy
+          </p>
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-3">
         <div className="rounded-xl border border-zinc-200 bg-white p-6">
           <h2 className="mb-4 text-lg font-semibold">Recent capture runs</h2>
           {captureHistory.length === 0 ? (
@@ -84,7 +101,7 @@ export default function ResultsProfile() {
                     {new Date(session.timestamp).toLocaleString()}
                   </span>
                   <span className="font-medium text-zinc-900">
-                    {formatCaptureScore(session)} pts · {formatAccuracy(session)}
+                    {formatCaptureScore(session)} pts
                   </span>
                 </li>
               ))}
@@ -107,8 +124,30 @@ export default function ResultsProfile() {
                     {new Date(session.timestamp).toLocaleString()}
                   </span>
                   <span className="font-medium text-zinc-900">
-                    {formatRecoverScore(session)} pts · {session.reactionTime}ms
-                    cost
+                    {formatRecoverScore(session)} pts
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="rounded-xl border border-zinc-200 bg-white p-6">
+          <h2 className="mb-4 text-lg font-semibold">Recent switch runs</h2>
+          {switchHistory.length === 0 ? (
+            <p className="text-sm text-zinc-600">No switch sessions yet.</p>
+          ) : (
+            <ul className="space-y-3">
+              {switchHistory.slice(0, 5).map((session) => (
+                <li
+                  key={session.id}
+                  className="flex items-center justify-between border-b border-zinc-100 pb-3 text-sm last:border-none last:pb-0"
+                >
+                  <span className="text-zinc-600">
+                    {new Date(session.timestamp).toLocaleString()}
+                  </span>
+                  <span className="font-medium text-zinc-900">
+                    {formatSwitchScore(session)} pts
                   </span>
                 </li>
               ))}
