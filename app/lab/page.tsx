@@ -3,19 +3,19 @@ import GameCard from "@/components/GameCard";
 
 const games = [
   {
-    title: "Calibration",
-    description:
-      "Tap when the circle turns green. Proves timing works on your device.",
-    href: "/lab/calibrate",
-    metric: "Device reaction time",
-    badge: "Live",
-  },
-  {
     title: "Capture",
     description:
       "Tap the blue target while red, moving, and fake distractors try to pull you off course.",
     href: "/lab/capture",
     metric: "Attention Capture Score",
+    badge: "Live",
+  },
+  {
+    title: "Recover",
+    description:
+      "Tap when green, survive full-screen distractions, and measure how fast you bounce back.",
+    href: "/lab/recover",
+    metric: "Recovery Score",
     badge: "Live",
   },
   {
@@ -25,13 +25,6 @@ const games = [
     href: "/lab/switch",
     metric: "Switching Score",
   },
-  {
-    title: "Recover",
-    description:
-      "Measure how quickly attention returns after an unexpected distraction.",
-    href: "/lab/recover",
-    metric: "Recovery Score",
-  },
 ];
 
 export default function LabPage() {
@@ -40,12 +33,12 @@ export default function LabPage() {
       <div className="mb-10">
         <h1 className="mb-2 text-3xl font-bold tracking-tight">Today&apos;s lab</h1>
         <p className="text-zinc-600">
-          Start with calibration, then try the game placeholders. Recover will be
-          the first full game we build next.
+          Three short games that measure capture, recovery, and switching. Start
+          with whichever you like.
         </p>
       </div>
 
-      <div className="mb-10 grid gap-6 sm:grid-cols-2">
+      <div className="mb-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {games.map((game) => (
           <GameCard key={game.href} {...game} />
         ))}

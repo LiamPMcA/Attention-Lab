@@ -1,6 +1,17 @@
-export type GameId = "calibration" | "capture" | "switch" | "recover";
+export type GameId = "capture" | "switch" | "recover";
 
 export type TrialPhase = "idle" | "ready" | "stimulus" | "feedback" | "complete";
+
+export type RecoverPhase =
+  | "idle"
+  | "ready"
+  | "distraction"
+  | "pause"
+  | "stimulus"
+  | "feedback"
+  | "complete";
+
+export type RecoverProbeType = "baseline" | "recovery";
 
 export type TrialOutcome = {
   reactionTime: number;
@@ -41,6 +52,11 @@ export type CaptureTrialOutcome = TrialOutcome & {
   hitTarget: boolean;
 };
 
+export type RecoverTrialOutcome = TrialOutcome & {
+  probeType: RecoverProbeType;
+  distractionFalseTap?: boolean;
+};
+
 export type SessionScore = {
   id: string;
   gameId: GameId;
@@ -48,4 +64,6 @@ export type SessionScore = {
   reactionTime: number;
   accuracy: number;
   trials: number;
+  baselineRt?: number;
+  recoveryRt?: number;
 };

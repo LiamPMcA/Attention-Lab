@@ -23,10 +23,10 @@ Open [http://localhost:3000](http://localhost:3000).
 |------|------|
 | `/` | Home |
 | `/lab` | Start lab — pick a game |
-| `/lab/capture` | Capture game (placeholder) |
+| `/lab/capture` | Capture game |
+| `/lab/recover` | Recover game |
 | `/lab/switch` | Switch game (placeholder) |
-| `/lab/recover` | Recover game (placeholder) |
-| `/results` | Attention profile (placeholder) |
+| `/results` | Attention profile |
 
 ## Deploy
 
