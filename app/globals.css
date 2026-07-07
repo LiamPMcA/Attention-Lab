@@ -7,8 +7,8 @@
   --muted: #5a4434;
   --muted-light: #b9a78d;
   --pill: #eed4ac;
-  --accent: #2ea334;
-  --accent-hover: #268a2c;
+  --accent: #6b4f3a;
+  --accent-hover: #564028;
 }
 
 @theme inline {
@@ -20,8 +20,8 @@
   --color-warm-muted: #5a4434;
   --color-warm-tan: #b9a78d;
   --color-warm-pill: #eed4ac;
-  --color-accent: #2ea334;
-  --color-accent-hover: #268a2c;
+  --color-accent: #6b4f3a;
+  --color-accent-hover: #564028;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --shadow-soft: 0 8px 30px rgba(90, 68, 52, 0.08);

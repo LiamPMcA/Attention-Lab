@@ -52,7 +52,7 @@ export default function SwitchGame() {
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
-      <p className="mb-2 text-sm font-medium uppercase tracking-wide text-teal-700">
+      <p className="mb-2 text-sm font-medium uppercase tracking-wide text-accent">
         Switch
       </p>
       <h1 className="mb-2 text-3xl font-bold tracking-tight">Match the rule</h1>
@@ -66,7 +66,7 @@ export default function SwitchGame() {
         <button
           type="button"
           onClick={startSession}
-          className="rounded-full bg-teal-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-teal-700"
+          className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
         >
           Start switch
         </button>
@@ -120,7 +120,7 @@ export default function SwitchGame() {
               <button
                 type="button"
                 onClick={() => handleResponse(true)}
-                className="rounded-xl bg-teal-600 py-4 text-sm font-semibold text-white transition-colors hover:bg-teal-700"
+                className="rounded-xl bg-accent py-4 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
               >
                 Match
               </button>
@@ -170,7 +170,7 @@ export default function SwitchGame() {
           <div className="mt-6 flex flex-wrap gap-4">
             <Link
               href="/results"
-              className="text-sm font-medium text-teal-600 hover:text-teal-700"
+              className="text-sm font-medium text-accent hover:text-accent-hover"
             >
               View attention profile →
             </Link>
