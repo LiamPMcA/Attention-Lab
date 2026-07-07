@@ -1,5 +1,6 @@
 import Link from "next/link";
 import GameCard from "@/components/GameCard";
+import PillLabel from "@/components/PillLabel";
 
 const games = [
   {
@@ -31,9 +32,14 @@ const games = [
 export default function LabPage() {
   return (
     <div className="mx-auto max-w-4xl px-6 py-16">
-      <div className="mb-10">
-        <h1 className="mb-2 text-3xl font-bold tracking-tight">Today&apos;s lab</h1>
-        <p className="text-zinc-600">
+      <div className="mb-10 text-center">
+        <div className="mb-4 flex justify-center">
+          <PillLabel>Today&apos;s lab</PillLabel>
+        </div>
+        <h1 className="mb-3 text-3xl font-bold tracking-tight text-warm-dark sm:text-4xl">
+          Pick a game and begin
+        </h1>
+        <p className="mx-auto max-w-2xl text-warm-muted">
           Three short games that measure capture, recovery, and switching. Start
           with whichever you like.
         </p>
@@ -47,7 +53,7 @@ export default function LabPage() {
 
       <Link
         href="/results"
-        className="text-sm font-medium text-teal-600 hover:text-teal-700"
+        className="text-sm font-medium text-accent hover:text-accent-hover"
       >
         View attention profile →
       </Link>

@@ -54,53 +54,55 @@ export default function ResultsProfile() {
 
   return (
     <>
-      <div className="mb-10 grid gap-4 sm:grid-cols-3">
-        <div className="rounded-xl border border-zinc-200 bg-white p-6">
-          <p className="text-sm font-medium text-zinc-600">Attention Capture</p>
-          <p className="mt-2 text-3xl font-bold text-zinc-900">
+      <div className="mb-10 grid gap-5 sm:grid-cols-3">
+        <div className="soft-card p-6 text-center">
+          <p className="text-sm font-medium text-warm-muted">Attention Capture</p>
+          <p className="mt-2 text-4xl font-bold text-accent">
             {formatCaptureScore(capture)}
           </p>
-          <p className="mt-1 text-xs text-zinc-500">
+          <p className="mt-1 text-xs text-warm-tan">
             {formatAccuracy(capture)} accuracy · {formatReactionTime(capture)} avg
           </p>
         </div>
-        <div className="rounded-xl border border-zinc-200 bg-white p-6">
-          <p className="text-sm font-medium text-zinc-600">Recovery</p>
-          <p className="mt-2 text-3xl font-bold text-zinc-900">
+        <div className="soft-card p-6 text-center">
+          <p className="text-sm font-medium text-warm-muted">Recovery</p>
+          <p className="mt-2 text-4xl font-bold text-accent">
             {formatRecoverScore(recover)}
           </p>
-          <p className="mt-1 text-xs text-zinc-500">
+          <p className="mt-1 text-xs text-warm-tan">
             {recover?.reactionTime ?? "—"} cost · {formatAccuracy(recover)} accuracy
           </p>
         </div>
-        <div className="rounded-xl border border-zinc-200 bg-white p-6">
-          <p className="text-sm font-medium text-zinc-600">Switching</p>
-          <p className="mt-2 text-3xl font-bold text-zinc-900">
+        <div className="soft-card p-6 text-center">
+          <p className="text-sm font-medium text-warm-muted">Switching</p>
+          <p className="mt-2 text-4xl font-bold text-accent">
             {formatSwitchScore(switchSession)}
           </p>
-          <p className="mt-1 text-xs text-zinc-500">
-            {switchSession?.reactionTime ?? "—"} cost · {formatAccuracy(switchSession)}{" "}
-            accuracy
+          <p className="mt-1 text-xs text-warm-tan">
+            {switchSession?.reactionTime ?? "—"} cost ·{" "}
+            {formatAccuracy(switchSession)} accuracy
           </p>
         </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <div className="rounded-xl border border-zinc-200 bg-white p-6">
-          <h2 className="mb-4 text-lg font-semibold">Recent capture runs</h2>
+        <div className="soft-card p-6">
+          <h2 className="mb-4 text-lg font-semibold text-warm-dark">
+            Recent capture runs
+          </h2>
           {captureHistory.length === 0 ? (
-            <p className="text-sm text-zinc-600">No capture sessions yet.</p>
+            <p className="text-sm text-warm-muted">No capture sessions yet.</p>
           ) : (
             <ul className="space-y-3">
               {captureHistory.slice(0, 5).map((session) => (
                 <li
                   key={session.id}
-                  className="flex items-center justify-between border-b border-zinc-100 pb-3 text-sm last:border-none last:pb-0"
+                  className="flex items-center justify-between border-b border-warm-pill/50 pb-3 text-sm last:border-none last:pb-0"
                 >
-                  <span className="text-zinc-600">
+                  <span className="text-warm-muted">
                     {new Date(session.timestamp).toLocaleString()}
                   </span>
-                  <span className="font-medium text-zinc-900">
+                  <span className="font-medium text-warm-dark">
                     {formatCaptureScore(session)} pts
                   </span>
                 </li>
@@ -109,21 +111,23 @@ export default function ResultsProfile() {
           )}
         </div>
 
-        <div className="rounded-xl border border-zinc-200 bg-white p-6">
-          <h2 className="mb-4 text-lg font-semibold">Recent recover runs</h2>
+        <div className="soft-card p-6">
+          <h2 className="mb-4 text-lg font-semibold text-warm-dark">
+            Recent recover runs
+          </h2>
           {recoverHistory.length === 0 ? (
-            <p className="text-sm text-zinc-600">No recover sessions yet.</p>
+            <p className="text-sm text-warm-muted">No recover sessions yet.</p>
           ) : (
             <ul className="space-y-3">
               {recoverHistory.slice(0, 5).map((session) => (
                 <li
                   key={session.id}
-                  className="flex items-center justify-between border-b border-zinc-100 pb-3 text-sm last:border-none last:pb-0"
+                  className="flex items-center justify-between border-b border-warm-pill/50 pb-3 text-sm last:border-none last:pb-0"
                 >
-                  <span className="text-zinc-600">
+                  <span className="text-warm-muted">
                     {new Date(session.timestamp).toLocaleString()}
                   </span>
-                  <span className="font-medium text-zinc-900">
+                  <span className="font-medium text-warm-dark">
                     {formatRecoverScore(session)} pts
                   </span>
                 </li>
@@ -132,21 +136,23 @@ export default function ResultsProfile() {
           )}
         </div>
 
-        <div className="rounded-xl border border-zinc-200 bg-white p-6">
-          <h2 className="mb-4 text-lg font-semibold">Recent switch runs</h2>
+        <div className="soft-card p-6">
+          <h2 className="mb-4 text-lg font-semibold text-warm-dark">
+            Recent switch runs
+          </h2>
           {switchHistory.length === 0 ? (
-            <p className="text-sm text-zinc-600">No switch sessions yet.</p>
+            <p className="text-sm text-warm-muted">No switch sessions yet.</p>
           ) : (
             <ul className="space-y-3">
               {switchHistory.slice(0, 5).map((session) => (
                 <li
                   key={session.id}
-                  className="flex items-center justify-between border-b border-zinc-100 pb-3 text-sm last:border-none last:pb-0"
+                  className="flex items-center justify-between border-b border-warm-pill/50 pb-3 text-sm last:border-none last:pb-0"
                 >
-                  <span className="text-zinc-600">
+                  <span className="text-warm-muted">
                     {new Date(session.timestamp).toLocaleString()}
                   </span>
-                  <span className="font-medium text-zinc-900">
+                  <span className="font-medium text-warm-dark">
                     {formatSwitchScore(session)} pts
                   </span>
                 </li>
