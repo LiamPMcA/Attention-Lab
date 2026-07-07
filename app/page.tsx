@@ -4,7 +4,7 @@ import PillLabel from "@/components/PillLabel";
 export default function Home() {
   return (
     <div>
-      <section className="relative overflow-hidden px-6 pb-16 pt-20 text-center">
+      <section className="px-6 pb-16 pt-20 text-center">
         <div className="mx-auto max-w-3xl">
           <div className="mb-6 flex justify-center">
             <PillLabel>Attention fitness</PillLabel>
@@ -18,11 +18,6 @@ export default function Home() {
             diagnosis.
           </p>
         </div>
-
-        <div
-          className="pointer-events-none absolute -bottom-16 left-1/2 h-40 w-[140%] -translate-x-1/2 rounded-[100%] bg-warm-pill/40"
-          aria-hidden="true"
-        />
       </section>
 
       <section className="mx-auto max-w-4xl px-6 pb-20 text-center">
