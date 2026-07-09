@@ -7,7 +7,7 @@ Duolingo for attention — short web games that measure capture, switching, and 
 - Next.js (App Router)
 - TypeScript
 - Tailwind CSS
-- Supabase (auth — Phase 1)
+- Supabase (auth + cloud scores)
 
 ## Local development
 
@@ -31,7 +31,14 @@ Open [http://localhost:3000](http://localhost:3000).
 
 For quick local testing, you can disable email confirmation under Authentication → Providers → Email.
 
-Game scores still use **localStorage** until Phase 2 (cloud save per user).
+## Supabase setup (Phase 2 — cloud scores)
+
+1. In Supabase, open **SQL Editor** → **New query**
+2. Paste the contents of `supabase/game_sessions.sql` from this repo
+3. Click **Run** — you should see “Success. No rows returned”
+4. Optional check: **Table Editor** → you should see a `game_sessions` table
+
+When logged in, game scores save to Supabase and sync across devices. Existing local scores upload automatically on first login.
 
 ## Routes
 

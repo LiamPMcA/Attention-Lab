@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { captureScore } from "@/lib/capture/score";
 import { recoverScore } from "@/lib/recover/score";
 import { switchScore } from "@/lib/switch/score";
-import { getLatestSession, getSessionsByGame } from "@/lib/storage";
+import {
+  isUsingCloudStorage,
+  loadLatestSession,
+  loadSessionsByGame,
+} from "@/lib/storage";
 import type { SessionScore } from "@/lib/types";
 
 function formatReactionTime(session: SessionScore | null) {
@@ -42,18 +46,61 @@ export default function ResultsProfile() {
   const [captureHistory, setCaptureHistory] = useState<SessionScore[]>([]);
   const [recoverHistory, setRecoverHistory] = useState<SessionScore[]>([]);
   const [switchHistory, setSwitchHistory] = useState<SessionScore[]>([]);
+  const [synced, setSynced] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setCapture(getLatestSession("capture"));
-    setRecover(getLatestSession("recover"));
-    setSwitchSession(getLatestSession("switch"));
-    setCaptureHistory(getSessionsByGame("capture"));
-    setRecoverHistory(getSessionsByGame("recover"));
-    setSwitchHistory(getSessionsByGame("switch"));
+    let cancelled = false;
+
+    async function loadResults() {
+      const [
+        captureSession,
+        recoverSession,
+        switchLatest,
+        captureRuns,
+        recoverRuns,
+        switchRuns,
+        usingCloud,
+      ] = await Promise.all([
+        loadLatestSession("capture"),
+        loadLatestSession("recover"),
+        loadLatestSession("switch"),
+        loadSessionsByGame("capture"),
+        loadSessionsByGame("recover"),
+        loadSessionsByGame("switch"),
+        isUsingCloudStorage(),
+      ]);
+
+      if (cancelled) return;
+
+      setCapture(captureSession);
+      setRecover(recoverSession);
+      setSwitchSession(switchLatest);
+      setCaptureHistory(captureRuns);
+      setRecoverHistory(recoverRuns);
+      setSwitchHistory(switchRuns);
+      setSynced(usingCloud);
+      setLoading(false);
+    }
+
+    void loadResults();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
+
+  if (loading) {
+    return <p className="text-center text-sm text-warm-muted">Loading results…</p>;
+  }
 
   return (
     <>
+      <p className="mb-6 text-center text-sm text-warm-muted">
+        {synced
+          ? "Scores synced to your account."
+          : "Scores saved on this device only. Log in to sync across devices."}
+      </p>
       <div className="mb-10 grid gap-5 sm:grid-cols-3">
         <div className="soft-card p-6 text-center">
           <p className="text-sm font-medium text-warm-muted">Attention Capture</p>
