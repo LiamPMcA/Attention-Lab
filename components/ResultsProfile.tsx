@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import SessionHistoryList from "@/components/SessionHistoryList";
 import { captureScore } from "@/lib/capture/score";
 import { recoverScore } from "@/lib/recover/score";
 import { switchScore } from "@/lib/switch/score";
@@ -133,80 +134,24 @@ export default function ResultsProfile() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <div className="soft-card p-6">
-          <h2 className="mb-4 text-lg font-semibold text-warm-dark">
-            Recent capture runs
-          </h2>
-          {captureHistory.length === 0 ? (
-            <p className="text-sm text-warm-muted">No capture sessions yet.</p>
-          ) : (
-            <ul className="space-y-3">
-              {captureHistory.slice(0, 5).map((session) => (
-                <li
-                  key={session.id}
-                  className="flex items-center justify-between border-b border-warm-pill/50 pb-3 text-sm last:border-none last:pb-0"
-                >
-                  <span className="text-warm-muted">
-                    {new Date(session.timestamp).toLocaleString()}
-                  </span>
-                  <span className="font-medium text-warm-dark">
-                    {formatCaptureScore(session)} pts
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div className="soft-card p-6">
-          <h2 className="mb-4 text-lg font-semibold text-warm-dark">
-            Recent recover runs
-          </h2>
-          {recoverHistory.length === 0 ? (
-            <p className="text-sm text-warm-muted">No recover sessions yet.</p>
-          ) : (
-            <ul className="space-y-3">
-              {recoverHistory.slice(0, 5).map((session) => (
-                <li
-                  key={session.id}
-                  className="flex items-center justify-between border-b border-warm-pill/50 pb-3 text-sm last:border-none last:pb-0"
-                >
-                  <span className="text-warm-muted">
-                    {new Date(session.timestamp).toLocaleString()}
-                  </span>
-                  <span className="font-medium text-warm-dark">
-                    {formatRecoverScore(session)} pts
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div className="soft-card p-6">
-          <h2 className="mb-4 text-lg font-semibold text-warm-dark">
-            Recent switch runs
-          </h2>
-          {switchHistory.length === 0 ? (
-            <p className="text-sm text-warm-muted">No switch sessions yet.</p>
-          ) : (
-            <ul className="space-y-3">
-              {switchHistory.slice(0, 5).map((session) => (
-                <li
-                  key={session.id}
-                  className="flex items-center justify-between border-b border-warm-pill/50 pb-3 text-sm last:border-none last:pb-0"
-                >
-                  <span className="text-warm-muted">
-                    {new Date(session.timestamp).toLocaleString()}
-                  </span>
-                  <span className="font-medium text-warm-dark">
-                    {formatSwitchScore(session)} pts
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <SessionHistoryList
+          title="Recent capture runs"
+          sessions={captureHistory}
+          formatScore={(session) => formatCaptureScore(session)}
+          emptyMessage="No capture sessions yet."
+        />
+        <SessionHistoryList
+          title="Recent recover runs"
+          sessions={recoverHistory}
+          formatScore={(session) => formatRecoverScore(session)}
+          emptyMessage="No recover sessions yet."
+        />
+        <SessionHistoryList
+          title="Recent switch runs"
+          sessions={switchHistory}
+          formatScore={(session) => formatSwitchScore(session)}
+          emptyMessage="No switch sessions yet."
+        />
       </div>
     </>
   );
