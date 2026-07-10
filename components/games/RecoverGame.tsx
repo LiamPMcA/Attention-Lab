@@ -213,9 +213,9 @@ export default function RecoverGame() {
 
       <Link
         href="/lab"
-        className="mt-8 inline-block text-sm font-medium text-zinc-600 hover:text-zinc-900"
+        className="mt-8 inline-block rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
       >
-        ← Back to lab
+        Back to lab
       </Link>
     </div>
   );
