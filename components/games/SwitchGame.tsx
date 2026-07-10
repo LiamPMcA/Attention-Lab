@@ -63,13 +63,21 @@ export default function SwitchGame() {
       </p>
 
       {phase === "idle" && (
-        <button
-          type="button"
-          onClick={startSession}
-          className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
-        >
-          Start switch
-        </button>
+        <div className="flex flex-col items-start gap-12">
+          <button
+            type="button"
+            onClick={startSession}
+            className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
+          >
+            Start switch
+          </button>
+          <Link
+            href="/lab"
+            className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
+          >
+            Back to lab
+          </Link>
+        </div>
       )}
 
       {phase !== "idle" && (
@@ -185,12 +193,14 @@ export default function SwitchGame() {
         </div>
       )}
 
-      <Link
-        href="/lab"
-        className="mt-8 inline-block rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
-      >
-        Back to lab
-      </Link>
+      {phase !== "idle" && (
+        <Link
+          href="/lab"
+          className="mt-8 inline-block rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
+        >
+          Back to lab
+        </Link>
+      )}
     </div>
   );
 }
