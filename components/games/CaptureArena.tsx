@@ -181,7 +181,7 @@ export default function CaptureArena({
 
   return (
     <div
-      className="relative h-80 w-full overflow-hidden rounded-2xl border-2 border-zinc-200 bg-zinc-100"
+      className="relative h-80 w-full overflow-hidden rounded-2xl border-2 border-zinc-200 bg-white"
       style={{ touchAction: "manipulation" }}
     >
       {phase === "ready" && (

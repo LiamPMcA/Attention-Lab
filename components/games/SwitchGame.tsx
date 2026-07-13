@@ -57,7 +57,8 @@ export default function SwitchGame() {
   };
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-16">
+    <div className="w-full bg-white">
+      <div className="mx-auto max-w-2xl px-6 py-16">
       <p className="mb-2 text-sm font-medium uppercase tracking-wide text-accent">
         Switch
       </p>
@@ -216,6 +217,7 @@ export default function SwitchGame() {
           Back to lab
         </Link>
       )}
+      </div>
     </div>
   );
 }

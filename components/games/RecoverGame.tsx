@@ -110,7 +110,8 @@ export default function RecoverGame() {
     phase === "ready" || phase === "pause" || phase === "stimulus" || phase === "feedback";
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-16">
+    <div className="w-full bg-white">
+      <div className="mx-auto max-w-2xl px-6 py-16">
       <p className="mb-2 text-sm font-medium uppercase tracking-wide text-accent">
         Recover
       </p>
@@ -242,6 +243,7 @@ export default function RecoverGame() {
           Back to lab
         </Link>
       )}
+      </div>
     </div>
   );
 }

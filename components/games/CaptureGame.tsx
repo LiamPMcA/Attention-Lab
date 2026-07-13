@@ -59,7 +59,8 @@ export default function CaptureGame() {
   };
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-16">
+    <div className="w-full bg-white">
+      <div className="mx-auto max-w-2xl px-6 py-16">
       <p className="mb-2 text-sm font-medium uppercase tracking-wide text-accent">
         Capture
       </p>
@@ -183,6 +184,7 @@ export default function CaptureGame() {
           Back to lab
         </Link>
       )}
+      </div>
     </div>
   );
 }
