@@ -21,10 +21,10 @@ export default function ResultsPage() {
       <ResultsProfile />
 
       <Link
-        href="/lab"
+        href="/"
         className="mt-8 inline-block text-sm font-medium text-accent hover:text-accent-hover"
       >
-        ← Back to lab
+        ← Back home
       </Link>
     </div>
   );

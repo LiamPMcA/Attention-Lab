@@ -3,10 +3,8 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import DifficultySlider from "@/components/DifficultySlider";
-import {
-  getDifficultyLabel,
-  type DifficultyLevel,
-} from "@/lib/difficulty";
+import SessionDifficultyBadge from "@/components/SessionDifficultyBadge";
+import type { DifficultyLevel } from "@/lib/difficulty";
 import { recoverScore, summarizeRecoverSession } from "@/lib/recover/score";
 import { saveSession } from "@/lib/storage";
 import { useRecoverSession } from "@/lib/trial/useRecoverSession";
@@ -77,6 +75,7 @@ function DistractionOverlay({
 
 export default function RecoverGame() {
   const savedRef = useRef(false);
+  const sessionDifficultyRef = useRef<DifficultyLevel>(3);
   const [difficulty, setDifficulty] = useState<DifficultyLevel>(3);
   const {
     phase,
@@ -92,13 +91,22 @@ export default function RecoverGame() {
 
   useEffect(() => {
     if (phase !== "complete" || savedRef.current) return;
-    saveSession(summarizeRecoverSession(outcomes, difficulty));
+    saveSession(
+      summarizeRecoverSession(outcomes, sessionDifficultyRef.current),
+    );
     savedRef.current = true;
-  }, [phase, outcomes, difficulty]);
+  }, [phase, outcomes]);
 
   const sessionSummary =
-    phase === "complete" ? summarizeRecoverSession(outcomes, difficulty) : null;
+    phase === "complete"
+      ? summarizeRecoverSession(outcomes, sessionDifficultyRef.current)
+      : null;
   const score = sessionSummary ? recoverScore(sessionSummary) : null;
+
+  const handleStart = () => {
+    sessionDifficultyRef.current = difficulty;
+    startSession(difficulty);
+  };
 
   const handleRestart = () => {
     savedRef.current = false;
@@ -127,16 +135,16 @@ export default function RecoverGame() {
           <div className="flex flex-col items-start gap-12">
             <button
               type="button"
-              onClick={() => startSession(difficulty)}
+              onClick={handleStart}
               className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
             >
               Start recover
             </button>
           <Link
-            href="/lab"
+            href="/"
             className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
           >
-            Back to lab
+            Back home
           </Link>
         </div>
         </>
@@ -182,14 +190,9 @@ export default function RecoverGame() {
 
       {sessionSummary && (
         <div className="mt-8 rounded-xl border border-zinc-200 bg-white p-6">
-          <h2 className="mb-4 text-lg font-semibold">Recover session saved</h2>
-          <dl className="grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-5">
-            <div>
-              <dt className="text-zinc-600">Difficulty</dt>
-              <dd className="text-2xl font-bold text-zinc-900">
-                {getDifficultyLabel(sessionSummary.difficulty)}
-              </dd>
-            </div>
+          <h2 className="mb-1 text-lg font-semibold">Recover session saved</h2>
+          <SessionDifficultyBadge difficulty={sessionSummary.difficulty} />
+          <dl className="grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <dt className="text-zinc-600">Recovery cost</dt>
               <dd className="text-2xl font-bold text-zinc-900">
@@ -237,10 +240,10 @@ export default function RecoverGame() {
 
       {phase !== "idle" && (
         <Link
-          href="/lab"
+          href="/"
           className="mt-8 inline-block rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
         >
-          Back to lab
+          Back home
         </Link>
       )}
       </div>

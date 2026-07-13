@@ -3,7 +3,6 @@ import AuthNav from "@/components/AuthNav";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/lab", label: "Lab" },
   { href: "/results", label: "Results" },
 ];
 

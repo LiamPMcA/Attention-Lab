@@ -44,8 +44,8 @@ When logged in, game scores save to Supabase and sync across devices. Existing l
 
 | Path | Page |
 |------|------|
-| `/` | Home |
-| `/lab` | Start lab — pick a game |
+| `/` | Home — pick a game |
+| `/lab` | Redirects to home |
 | `/lab/capture` | Capture game |
 | `/lab/recover` | Recover game |
 | `/lab/switch` | Switch game |
