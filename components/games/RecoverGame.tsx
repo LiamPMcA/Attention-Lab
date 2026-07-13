@@ -3,7 +3,10 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import DifficultySlider from "@/components/DifficultySlider";
-import type { DifficultyLevel } from "@/lib/difficulty";
+import {
+  getDifficultyLabel,
+  type DifficultyLevel,
+} from "@/lib/difficulty";
 import { recoverScore, summarizeRecoverSession } from "@/lib/recover/score";
 import { saveSession } from "@/lib/storage";
 import { useRecoverSession } from "@/lib/trial/useRecoverSession";
@@ -179,7 +182,13 @@ export default function RecoverGame() {
       {sessionSummary && (
         <div className="mt-8 rounded-xl border border-zinc-200 bg-white p-6">
           <h2 className="mb-4 text-lg font-semibold">Recover session saved</h2>
-          <dl className="grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+          <dl className="grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-5">
+            <div>
+              <dt className="text-zinc-600">Difficulty</dt>
+              <dd className="text-2xl font-bold text-zinc-900">
+                {getDifficultyLabel(sessionSummary.difficulty)}
+              </dd>
+            </div>
             <div>
               <dt className="text-zinc-600">Recovery cost</dt>
               <dd className="text-2xl font-bold text-zinc-900">
