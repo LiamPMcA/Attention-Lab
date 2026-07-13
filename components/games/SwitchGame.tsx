@@ -80,7 +80,7 @@ export default function SwitchGame() {
       {phase === "idle" && (
         <>
           <DifficultySlider value={difficulty} onChange={setDifficulty} />
-          <div className="flex flex-col items-start gap-12">
+          <div className="flex flex-wrap items-center gap-4">
             <button
               type="button"
               onClick={handleStart}
