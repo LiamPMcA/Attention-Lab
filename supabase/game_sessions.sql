@@ -13,6 +13,7 @@ create table if not exists public.game_sessions (
   recovery_rt integer,
   repeat_rt integer,
   switch_rt integer,
+  difficulty smallint check (difficulty between 1 and 5),
   created_at timestamptz not null default now()
 );
 

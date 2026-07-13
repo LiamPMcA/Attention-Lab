@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import SessionRunDetail from "@/components/SessionRunDetail";
+import { getDifficultyLabel } from "@/lib/difficulty";
 import type { SessionScore } from "@/lib/types";
 
 type SessionHistoryListProps = {
@@ -44,8 +45,13 @@ export default function SessionHistoryList({
                   aria-expanded={isExpanded}
                   className="flex w-full items-center justify-between gap-3 text-left text-sm transition-colors hover:text-warm-dark"
                 >
-                  <span className="text-warm-muted">
-                    {new Date(session.timestamp).toLocaleString()}
+                  <span className="min-w-0 text-warm-muted">
+                    <span className="block truncate">
+                      {new Date(session.timestamp).toLocaleString()}
+                    </span>
+                    <span className="text-xs text-warm-tan">
+                      {getDifficultyLabel(session.difficulty)}
+                    </span>
                   </span>
                   <span className="flex items-center gap-2 font-medium text-warm-dark">
                     {formatScore(session)} pts

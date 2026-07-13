@@ -89,12 +89,12 @@ export default function RecoverGame() {
 
   useEffect(() => {
     if (phase !== "complete" || savedRef.current) return;
-    saveSession(summarizeRecoverSession(outcomes));
+    saveSession(summarizeRecoverSession(outcomes, difficulty));
     savedRef.current = true;
-  }, [phase, outcomes]);
+  }, [phase, outcomes, difficulty]);
 
   const sessionSummary =
-    phase === "complete" ? summarizeRecoverSession(outcomes) : null;
+    phase === "complete" ? summarizeRecoverSession(outcomes, difficulty) : null;
   const score = sessionSummary ? recoverScore(sessionSummary) : null;
 
   const handleRestart = () => {

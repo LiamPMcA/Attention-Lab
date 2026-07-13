@@ -1,7 +1,9 @@
 import type { CaptureTrialOutcome, SessionScore } from "@/lib/types";
+import type { DifficultyLevel } from "@/lib/difficulty";
 
 export function summarizeCaptureSession(
   outcomes: CaptureTrialOutcome[],
+  difficulty?: DifficultyLevel,
 ): SessionScore {
   const hits = outcomes.filter((outcome) => outcome.hitTarget);
   const averageReactionTime =
@@ -19,6 +21,7 @@ export function summarizeCaptureSession(
     reactionTime: averageReactionTime,
     accuracy: outcomes.length > 0 ? hits.length / outcomes.length : 0,
     trials: outcomes.length,
+    difficulty,
   };
 }
 

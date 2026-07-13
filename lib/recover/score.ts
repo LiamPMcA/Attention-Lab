@@ -1,4 +1,5 @@
 import type { RecoverTrialOutcome, SessionScore } from "@/lib/types";
+import type { DifficultyLevel } from "@/lib/difficulty";
 
 function averageReactionTime(outcomes: RecoverTrialOutcome[]): number {
   const hits = outcomes.filter(
@@ -17,6 +18,7 @@ export type RecoverSessionSummary = SessionScore & {
 
 export function summarizeRecoverSession(
   outcomes: RecoverTrialOutcome[],
+  difficulty?: DifficultyLevel,
 ): RecoverSessionSummary {
   const baselineOutcomes = outcomes.filter(
     (outcome) => outcome.probeType === "baseline",
@@ -42,6 +44,7 @@ export function summarizeRecoverSession(
     trials: outcomes.length,
     baselineRt,
     recoveryRt,
+    difficulty,
   };
 }
 

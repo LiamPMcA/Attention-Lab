@@ -40,12 +40,12 @@ export default function SwitchGame() {
 
   useEffect(() => {
     if (phase !== "complete" || savedRef.current) return;
-    saveSession(summarizeSwitchSession(outcomes));
+    saveSession(summarizeSwitchSession(outcomes, difficulty));
     savedRef.current = true;
-  }, [phase, outcomes]);
+  }, [phase, outcomes, difficulty]);
 
   const sessionSummary =
-    phase === "complete" ? summarizeSwitchSession(outcomes) : null;
+    phase === "complete" ? summarizeSwitchSession(outcomes, difficulty) : null;
   const score = sessionSummary ? switchScore(sessionSummary) : null;
 
   const handleRestart = () => {

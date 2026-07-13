@@ -9,6 +9,7 @@ type GameSessionRow = {
   reaction_time: number;
   accuracy: number;
   trials: number;
+  difficulty: number | null;
   baseline_rt: number | null;
   recovery_rt: number | null;
   repeat_rt: number | null;
@@ -23,6 +24,7 @@ function rowToSession(row: GameSessionRow): SessionScore {
     reactionTime: row.reaction_time,
     accuracy: row.accuracy,
     trials: row.trials,
+    difficulty: row.difficulty ?? undefined,
     baselineRt: row.baseline_rt ?? undefined,
     recoveryRt: row.recovery_rt ?? undefined,
     repeatRt: row.repeat_rt ?? undefined,
@@ -39,6 +41,7 @@ function sessionToRow(session: SessionScore, userId: string): GameSessionRow {
     reaction_time: session.reactionTime,
     accuracy: session.accuracy,
     trials: session.trials,
+    difficulty: session.difficulty ?? null,
     baseline_rt: session.baselineRt ?? null,
     recovery_rt: session.recoveryRt ?? null,
     repeat_rt: session.repeatRt ?? null,

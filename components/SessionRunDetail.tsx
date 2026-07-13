@@ -1,4 +1,5 @@
 import { captureScore } from "@/lib/capture/score";
+import { getDifficultyLabel } from "@/lib/difficulty";
 import { recoverScore } from "@/lib/recover/score";
 import { switchScore } from "@/lib/switch/score";
 import type { SessionScore } from "@/lib/types";
@@ -27,6 +28,7 @@ function CaptureRunDetail({ session }: { session: SessionScore }) {
   return (
     <>
       <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+        <Stat label="Difficulty" value={getDifficultyLabel(session.difficulty)} />
         <Stat label="Capture score" value={score !== null ? String(score) : "—"} />
         <Stat
           label="Avg reaction time"
@@ -47,6 +49,7 @@ function RecoverRunDetail({ session }: { session: SessionScore }) {
   return (
     <>
       <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+        <Stat label="Difficulty" value={getDifficultyLabel(session.difficulty)} />
         <Stat label="Recovery cost" value={`${session.reactionTime}ms`} />
         <Stat
           label="Baseline RT"
@@ -74,6 +77,7 @@ function SwitchRunDetail({ session }: { session: SessionScore }) {
   return (
     <>
       <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+        <Stat label="Difficulty" value={getDifficultyLabel(session.difficulty)} />
         <Stat label="Switch cost" value={`${session.reactionTime}ms`} />
         <Stat
           label="Repeat RT"

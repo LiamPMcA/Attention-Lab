@@ -42,12 +42,12 @@ export default function CaptureGame() {
 
   useEffect(() => {
     if (phase !== "complete" || savedRef.current) return;
-    saveSession(summarizeCaptureSession(outcomes));
+    saveSession(summarizeCaptureSession(outcomes, difficulty));
     savedRef.current = true;
-  }, [phase, outcomes]);
+  }, [phase, outcomes, difficulty]);
 
   const sessionSummary =
-    phase === "complete" ? summarizeCaptureSession(outcomes) : null;
+    phase === "complete" ? summarizeCaptureSession(outcomes, difficulty) : null;
   const score = sessionSummary ? captureScore(sessionSummary) : null;
 
   const handleRestart = () => {

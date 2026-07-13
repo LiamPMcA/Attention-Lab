@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import SessionHistoryList from "@/components/SessionHistoryList";
 import { captureScore } from "@/lib/capture/score";
+import { getDifficultyLabel } from "@/lib/difficulty";
 import { recoverScore } from "@/lib/recover/score";
 import { switchScore } from "@/lib/switch/score";
 import {
@@ -109,7 +110,8 @@ export default function ResultsProfile() {
             {formatCaptureScore(capture)}
           </p>
           <p className="mt-1 text-xs text-warm-tan">
-            {formatAccuracy(capture)} accuracy · {formatReactionTime(capture)} avg
+            {getDifficultyLabel(capture?.difficulty)} · {formatAccuracy(capture)} accuracy ·{" "}
+            {formatReactionTime(capture)} avg
           </p>
         </div>
         <div className="soft-card p-6 text-center">
@@ -118,7 +120,8 @@ export default function ResultsProfile() {
             {formatRecoverScore(recover)}
           </p>
           <p className="mt-1 text-xs text-warm-tan">
-            {recover?.reactionTime ?? "—"} cost · {formatAccuracy(recover)} accuracy
+            {getDifficultyLabel(recover?.difficulty)} · {recover?.reactionTime ?? "—"} cost ·{" "}
+            {formatAccuracy(recover)} accuracy
           </p>
         </div>
         <div className="soft-card p-6 text-center">
@@ -127,6 +130,7 @@ export default function ResultsProfile() {
             {formatSwitchScore(switchSession)}
           </p>
           <p className="mt-1 text-xs text-warm-tan">
+            {getDifficultyLabel(switchSession?.difficulty)} ·{" "}
             {switchSession?.reactionTime ?? "—"} cost ·{" "}
             {formatAccuracy(switchSession)} accuracy
           </p>

@@ -1,4 +1,5 @@
 import type { SessionScore, SwitchTrialOutcome } from "@/lib/types";
+import type { DifficultyLevel } from "@/lib/difficulty";
 
 export type SwitchSessionSummary = SessionScore & {
   repeatRt: number;
@@ -15,6 +16,7 @@ function averageReactionTime(outcomes: SwitchTrialOutcome[]): number {
 
 export function summarizeSwitchSession(
   outcomes: SwitchTrialOutcome[],
+  difficulty?: DifficultyLevel,
 ): SwitchSessionSummary {
   const repeatOutcomes = outcomes.filter((outcome) => !outcome.isSwitchTrial);
   const switchOutcomes = outcomes.filter((outcome) => outcome.isSwitchTrial);
@@ -34,6 +36,7 @@ export function summarizeSwitchSession(
     trials: outcomes.length,
     repeatRt,
     switchRt,
+    difficulty,
   };
 }
 

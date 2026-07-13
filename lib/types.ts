@@ -74,6 +74,7 @@ export type SessionScore = {
   reactionTime: number;
   accuracy: number;
   trials: number;
+  difficulty?: number;
   baselineRt?: number;
   recoveryRt?: number;
   repeatRt?: number;

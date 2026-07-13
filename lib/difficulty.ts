@@ -74,6 +74,11 @@ export function getDifficultySettings(level: DifficultyLevel): DifficultySetting
   };
 }
 
+export function getDifficultyLabel(level?: number): string {
+  if (!level || level < 1 || level > 5) return "Standard";
+  return DIFFICULTY_OPTIONS[level - 1].label;
+}
+
 export function getEffectiveCaptureTrialIndex(
   trialIndex: number,
   settings: DifficultySettings,
