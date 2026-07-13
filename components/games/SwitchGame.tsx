@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import DifficultySlider from "@/components/DifficultySlider";
+import type { DifficultyLevel } from "@/lib/difficulty";
 import { ruleLabel } from "@/lib/switch/schedule";
 import { switchScore, summarizeSwitchSession } from "@/lib/switch/score";
 import { saveSession } from "@/lib/storage";
@@ -21,6 +23,7 @@ function feedbackMessage(
 
 export default function SwitchGame() {
   const savedRef = useRef(false);
+  const [difficulty, setDifficulty] = useState<DifficultyLevel>(3);
   const {
     phase,
     trialIndex,
@@ -63,14 +66,16 @@ export default function SwitchGame() {
       </p>
 
       {phase === "idle" && (
-        <div className="flex flex-col items-start gap-12">
-          <button
-            type="button"
-            onClick={startSession}
-            className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
-          >
-            Start switch
-          </button>
+        <>
+          <DifficultySlider value={difficulty} onChange={setDifficulty} />
+          <div className="flex flex-col items-start gap-12">
+            <button
+              type="button"
+              onClick={() => startSession(difficulty)}
+              className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
+            >
+              Start switch
+            </button>
           <Link
             href="/lab"
             className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
@@ -78,6 +83,7 @@ export default function SwitchGame() {
             Back to lab
           </Link>
         </div>
+        </>
       )}
 
       {phase !== "idle" && (

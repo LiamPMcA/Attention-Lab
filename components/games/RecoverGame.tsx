@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import DifficultySlider from "@/components/DifficultySlider";
+import type { DifficultyLevel } from "@/lib/difficulty";
 import { recoverScore, summarizeRecoverSession } from "@/lib/recover/score";
 import { saveSession } from "@/lib/storage";
 import { useRecoverSession } from "@/lib/trial/useRecoverSession";
@@ -72,6 +74,7 @@ function DistractionOverlay({
 
 export default function RecoverGame() {
   const savedRef = useRef(false);
+  const [difficulty, setDifficulty] = useState<DifficultyLevel>(3);
   const {
     phase,
     probeIndex,
@@ -115,14 +118,16 @@ export default function RecoverGame() {
       </p>
 
       {phase === "idle" && (
-        <div className="flex flex-col items-start gap-12">
-          <button
-            type="button"
-            onClick={startSession}
-            className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
-          >
-            Start recover
-          </button>
+        <>
+          <DifficultySlider value={difficulty} onChange={setDifficulty} />
+          <div className="flex flex-col items-start gap-12">
+            <button
+              type="button"
+              onClick={() => startSession(difficulty)}
+              className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
+            >
+              Start recover
+            </button>
           <Link
             href="/lab"
             className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
@@ -130,6 +135,7 @@ export default function RecoverGame() {
             Back to lab
           </Link>
         </div>
+        </>
       )}
 
       {phase !== "idle" && (

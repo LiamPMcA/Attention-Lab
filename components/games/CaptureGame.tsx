@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import DifficultySlider from "@/components/DifficultySlider";
 import { captureScore, summarizeCaptureSession } from "@/lib/capture/score";
+import type { DifficultyLevel } from "@/lib/difficulty";
 import { saveSession } from "@/lib/storage";
 import { useCaptureSession } from "@/lib/trial/useCaptureSession";
 import CaptureArena from "@/components/games/CaptureArena";
@@ -25,6 +27,7 @@ function feedbackMessage(
 
 export default function CaptureGame() {
   const savedRef = useRef(false);
+  const [difficulty, setDifficulty] = useState<DifficultyLevel>(3);
   const {
     phase,
     trialIndex,
@@ -64,14 +67,16 @@ export default function CaptureGame() {
       </p>
 
       {phase === "idle" && (
-        <div className="flex flex-col items-start gap-12">
-          <button
-            type="button"
-            onClick={startSession}
-            className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
-          >
-            Start capture
-          </button>
+        <>
+          <DifficultySlider value={difficulty} onChange={setDifficulty} />
+          <div className="flex flex-col items-start gap-12">
+            <button
+              type="button"
+              onClick={() => startSession(difficulty)}
+              className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
+            >
+              Start capture
+            </button>
           <Link
             href="/lab"
             className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
@@ -79,6 +84,7 @@ export default function CaptureGame() {
             Back to lab
           </Link>
         </div>
+        </>
       )}
 
       {phase !== "idle" && (

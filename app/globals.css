@@ -48,3 +48,34 @@ body {
 .soft-card-hover:hover {
   box-shadow: var(--shadow-soft-hover);
 }
+
+.difficulty-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--pill) 70%, white);
+  outline: none;
+}
+
+.difficulty-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 1.25rem;
+  width: 1.25rem;
+  border-radius: 9999px;
+  border: 2px solid white;
+  background: var(--accent);
+  box-shadow: 0 2px 8px rgba(90, 68, 52, 0.25);
+  cursor: pointer;
+}
+
+.difficulty-slider::-moz-range-thumb {
+  height: 1.25rem;
+  width: 1.25rem;
+  border-radius: 9999px;
+  border: 2px solid white;
+  background: var(--accent);
+  box-shadow: 0 2px 8px rgba(90, 68, 52, 0.25);
+  cursor: pointer;
+}

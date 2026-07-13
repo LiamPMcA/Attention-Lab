@@ -6,6 +6,11 @@ import {
   getProbeType,
   RECOVER_PROBE_COUNT,
 } from "@/lib/recover/schedule";
+import {
+  getDifficultySettings,
+  type DifficultyLevel,
+  type DifficultySettings,
+} from "@/lib/difficulty";
 import { now, randomDelay, reactionTime } from "@/lib/timing";
 import type {
   RecoverPhase,
@@ -42,6 +47,7 @@ export function useRecoverSession() {
   const outcomesRef = useRef<RecoverTrialOutcome[]>([]);
   const resolvedRef = useRef(false);
   const distractionFalseTapRef = useRef(false);
+  const difficultyRef = useRef<DifficultySettings>(getDifficultySettings(3));
 
   const clearTimer = useCallback(() => {
     if (timeoutRef.current) {
@@ -128,7 +134,9 @@ export function useRecoverSession() {
 
   const beginDistraction = useCallback(
     (probeIndex: number, probeType: RecoverProbeType) => {
-      const distraction = getDistraction();
+      const distraction = getDistraction(
+        difficultyRef.current.recoverDistractionIntensity,
+      );
       distractionFalseTapRef.current = false;
 
       setState((current) => ({
@@ -176,10 +184,14 @@ export function useRecoverSession() {
         distractionFalseTap: false,
       }));
 
+      const settings = difficultyRef.current;
       const delay =
         probeType === "recovery"
-          ? randomDelay(280, 2200)
-          : randomDelay(500, 1200);
+          ? randomDelay(
+              settings.recoverRecoveryReadyMinMs,
+              settings.recoverRecoveryReadyMaxMs,
+            )
+          : randomDelay(settings.recoverReadyMinMs, settings.recoverReadyMaxMs);
       timeoutRef.current = setTimeout(() => {
         if (probeType === "recovery") {
           beginDistraction(probeIndex, probeType);
@@ -193,7 +205,8 @@ export function useRecoverSession() {
 
   beginProbeRef.current = beginProbe;
 
-  const startSession = useCallback(() => {
+  const startSession = useCallback((level: DifficultyLevel = 3) => {
+    difficultyRef.current = getDifficultySettings(level);
     clearTimer();
     outcomesRef.current = [];
     resolvedRef.current = false;

@@ -1,14 +1,17 @@
 import type { SwitchRule } from "@/lib/types";
 
 export const SWITCH_TRIAL_COUNT = 20;
-const BLOCK_SIZE = 4;
+const DEFAULT_BLOCK_SIZE = 4;
 
-export function getRuleForTrial(trialIndex: number): {
+export function getRuleForTrial(
+  trialIndex: number,
+  blockSize = DEFAULT_BLOCK_SIZE,
+): {
   rule: SwitchRule;
   isSwitchTrial: boolean;
 } {
-  const blockIndex = Math.floor(trialIndex / BLOCK_SIZE);
-  const positionInBlock = trialIndex % BLOCK_SIZE;
+  const blockIndex = Math.floor(trialIndex / blockSize);
+  const positionInBlock = trialIndex % blockSize;
   const rule: SwitchRule = blockIndex % 2 === 0 ? "odd" : "vowel";
   const isSwitchTrial = trialIndex > 0 && positionInBlock === 0;
 

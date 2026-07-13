@@ -11,14 +11,17 @@ export type Distraction = {
 
 const TEXT_LABELS = ["Look here!", "Hey!", "Over here!", "Wait!"];
 
-export function getDistraction(): Distraction {
+export function getDistraction(intensity = 1): Distraction {
+  const durationScale = 0.85 + intensity * 0.3;
+  const pauseScale = 1.25 - intensity * 0.35;
+
   const roll = Math.random();
 
   if (roll < 0.33) {
     return {
       kind: "flash",
-      durationMs: randomDelay(260, 720),
-      pauseMs: randomDelay(180, 520),
+      durationMs: Math.round(randomDelay(260, 720) * durationScale),
+      pauseMs: Math.round(randomDelay(180, 520) * pauseScale),
     };
   }
 
@@ -26,15 +29,15 @@ export function getDistraction(): Distraction {
     return {
       kind: "text",
       label: TEXT_LABELS[Math.floor(Math.random() * TEXT_LABELS.length)],
-      durationMs: randomDelay(300, 750),
-      pauseMs: randomDelay(180, 520),
+      durationMs: Math.round(randomDelay(300, 750) * durationScale),
+      pauseMs: Math.round(randomDelay(180, 520) * pauseScale),
     };
   }
 
   return {
     kind: "burst",
     label: TEXT_LABELS[Math.floor(Math.random() * TEXT_LABELS.length)],
-    durationMs: randomDelay(320, 780),
-    pauseMs: randomDelay(180, 520),
+    durationMs: Math.round(randomDelay(320, 780) * durationScale),
+    pauseMs: Math.round(randomDelay(180, 520) * pauseScale),
   };
 }

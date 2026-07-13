@@ -1,4 +1,5 @@
 import { getCaptureLevel } from "@/lib/capture/levels";
+import type { DifficultySettings } from "@/lib/difficulty";
 import type { ArenaShape, ShapeKind, ShapeVariant } from "@/lib/types";
 
 const SHAPE_SIZE = 56;
@@ -84,8 +85,11 @@ function createShape(
   return shape;
 }
 
-export function spawnCaptureTrial(trialIndex: number): ArenaShape[] {
-  const level = getCaptureLevel(trialIndex);
+export function spawnCaptureTrial(
+  trialIndex: number,
+  difficulty?: DifficultySettings,
+): ArenaShape[] {
+  const level = getCaptureLevel(trialIndex, difficulty);
   const placed: { x: number; y: number }[] = [];
   const shapes: ArenaShape[] = [];
 

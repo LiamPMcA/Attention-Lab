@@ -3,6 +3,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CAPTURE_TRIAL_COUNT } from "@/lib/capture/levels";
 import { spawnCaptureTrial } from "@/lib/capture/spawnTrial";
+import {
+  getDifficultySettings,
+  type DifficultyLevel,
+  type DifficultySettings,
+} from "@/lib/difficulty";
 import { now, randomDelay, reactionTime } from "@/lib/timing";
 import type { ArenaShape, CaptureTrialOutcome, TrialPhase } from "@/lib/types";
 
@@ -24,9 +29,6 @@ type CaptureSessionState = {
 
 export function useCaptureSession(config: CaptureSessionConfig = {}) {
   const totalTrials = config.totalTrials ?? CAPTURE_TRIAL_COUNT;
-  const readyMinMs = config.readyMinMs ?? 400;
-  const readyMaxMs = config.readyMaxMs ?? 800;
-  const stimulusTimeoutMs = config.stimulusTimeoutMs ?? 2500;
   const feedbackMs = config.feedbackMs ?? 900;
 
   const [state, setState] = useState<CaptureSessionState>({
@@ -41,6 +43,7 @@ export function useCaptureSession(config: CaptureSessionConfig = {}) {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const outcomesRef = useRef<CaptureTrialOutcome[]>([]);
   const resolvedRef = useRef(false);
+  const difficultyRef = useRef<DifficultySettings>(getDifficultySettings(3));
 
   const clearTimer = useCallback(() => {
     if (timeoutRef.current) {
@@ -63,9 +66,12 @@ export function useCaptureSession(config: CaptureSessionConfig = {}) {
         shapes: [],
       }));
 
-      const delay = randomDelay(readyMinMs, readyMaxMs);
+      const delay = randomDelay(
+        difficultyRef.current.captureReadyMinMs,
+        difficultyRef.current.captureReadyMaxMs,
+      );
       timeoutRef.current = setTimeout(() => {
-        const shapes = spawnCaptureTrial(trialIndex);
+        const shapes = spawnCaptureTrial(trialIndex, difficultyRef.current);
         stimulusAt.current = now();
         resolvedRef.current = false;
 
@@ -110,10 +116,10 @@ export function useCaptureSession(config: CaptureSessionConfig = {}) {
             }
             beginReadyPhase(completedOutcomes.length);
           }, feedbackMs);
-        }, stimulusTimeoutMs);
+        }, difficultyRef.current.captureStimulusTimeoutMs);
       }, delay);
     },
-    [clearTimer, feedbackMs, readyMaxMs, readyMinMs, stimulusTimeoutMs, totalTrials],
+    [clearTimer, feedbackMs, totalTrials],
   );
 
   const finishTrial = useCallback(
@@ -178,7 +184,8 @@ export function useCaptureSession(config: CaptureSessionConfig = {}) {
     [finishTrial, state.phase, state.shapes],
   );
 
-  const startSession = useCallback(() => {
+  const startSession = useCallback((level: DifficultyLevel = 3) => {
+    difficultyRef.current = getDifficultySettings(level);
     clearTimer();
     outcomesRef.current = [];
     resolvedRef.current = false;

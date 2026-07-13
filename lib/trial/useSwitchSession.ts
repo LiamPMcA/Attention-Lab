@@ -6,6 +6,11 @@ import {
   getRuleForTrial,
   SWITCH_TRIAL_COUNT,
 } from "@/lib/switch/schedule";
+import {
+  getDifficultySettings,
+  type DifficultyLevel,
+  type DifficultySettings,
+} from "@/lib/difficulty";
 import { now, randomDelay, reactionTime } from "@/lib/timing";
 import type {
   SwitchRule,
@@ -24,7 +29,6 @@ type SwitchSessionState = {
 };
 
 const FEEDBACK_MS = 800;
-const STIMULUS_TIMEOUT_MS = 3000;
 
 export function useSwitchSession() {
   const [state, setState] = useState<SwitchSessionState>({
@@ -42,6 +46,7 @@ export function useSwitchSession() {
   const outcomesRef = useRef<SwitchTrialOutcome[]>([]);
   const resolvedRef = useRef(false);
   const beginTrialRef = useRef<(trialIndex: number) => void>(() => {});
+  const difficultyRef = useRef<DifficultySettings>(getDifficultySettings(3));
 
   const clearTimer = useCallback(() => {
     if (timeoutRef.current) {
@@ -121,7 +126,7 @@ export function useSwitchSession() {
           respondedMatch: false,
           correct: false,
         });
-      }, STIMULUS_TIMEOUT_MS);
+      }, difficultyRef.current.switchStimulusTimeoutMs);
     },
     [clearTimer, recordOutcome],
   );
@@ -132,7 +137,10 @@ export function useSwitchSession() {
       resolvedRef.current = false;
       stimulusAt.current = null;
 
-      const { rule, isSwitchTrial } = getRuleForTrial(trialIndex);
+      const { rule, isSwitchTrial } = getRuleForTrial(
+        trialIndex,
+        difficultyRef.current.switchBlockSize,
+      );
 
       setState((current) => ({
         ...current,
@@ -144,7 +152,10 @@ export function useSwitchSession() {
         lastOutcome: null,
       }));
 
-      const delay = randomDelay(400, 900);
+      const delay = randomDelay(
+        difficultyRef.current.switchReadyMinMs,
+        difficultyRef.current.switchReadyMaxMs,
+      );
       timeoutRef.current = setTimeout(() => {
         beginStimulus(trialIndex, rule, isSwitchTrial);
       }, delay);
@@ -154,7 +165,8 @@ export function useSwitchSession() {
 
   beginTrialRef.current = beginTrial;
 
-  const startSession = useCallback(() => {
+  const startSession = useCallback((level: DifficultyLevel = 3) => {
+    difficultyRef.current = getDifficultySettings(level);
     clearTimer();
     outcomesRef.current = [];
     resolvedRef.current = false;
