@@ -73,8 +73,10 @@ export default function SwitchGame() {
       <h1 className="mb-2 text-3xl font-bold tracking-tight">Match the rule</h1>
       <p className="mb-8 text-zinc-600">
         The rule changes between odd numbers and vowels. Tap{" "}
-        <strong>Match</strong> if the letter or number fits the rule, or{" "}
-        <strong>Skip</strong> if it doesn&apos;t.
+        <strong>Match</strong>{" "}
+        if the letter or number fits the rule, or{" "}
+        <strong>Skip</strong>{" "}
+        if it doesn&apos;t.
       </p>
 
       {phase === "idle" && (
