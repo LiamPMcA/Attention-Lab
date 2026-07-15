@@ -79,7 +79,11 @@ export default function SwitchGame() {
 
       {phase === "idle" && (
         <>
-          <DifficultySlider value={difficulty} onChange={setDifficulty} />
+          <DifficultySlider
+            value={difficulty}
+            onChange={setDifficulty}
+            description="Measures how quickly you adapt when the rule changes — the extra time it costs to switch between tasks."
+          />
           <div className="flex flex-wrap items-center gap-4">
             <button
               type="button"

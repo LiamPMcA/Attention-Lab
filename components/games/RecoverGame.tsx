@@ -131,7 +131,11 @@ export default function RecoverGame() {
 
       {phase === "idle" && (
         <>
-          <DifficultySlider value={difficulty} onChange={setDifficulty} />
+          <DifficultySlider
+            value={difficulty}
+            onChange={setDifficulty}
+            description="Measures how fast you refocus after sudden distractions — the gap between your normal speed and your bounce-back speed."
+          />
           <div className="flex flex-wrap items-center gap-4">
             <button
               type="button"

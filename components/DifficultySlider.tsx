@@ -6,11 +6,13 @@ import {
 type DifficultySliderProps = {
   value: DifficultyLevel;
   onChange: (value: DifficultyLevel) => void;
+  description: string;
 };
 
 export default function DifficultySlider({
   value,
   onChange,
+  description,
 }: DifficultySliderProps) {
   const option = DIFFICULTY_OPTIONS[value - 1];
 
@@ -46,9 +48,7 @@ export default function DifficultySlider({
         <span>Intense</span>
       </div>
 
-      <p className="mt-3 text-sm leading-6 text-warm-muted">
-        {option.description}
-      </p>
+      <p className="mt-3 text-sm leading-6 text-warm-muted">{description}</p>
     </div>
   );
 }

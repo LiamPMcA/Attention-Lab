@@ -80,7 +80,11 @@ export default function CaptureGame() {
 
       {phase === "idle" && (
         <>
-          <DifficultySlider value={difficulty} onChange={setDifficulty} />
+          <DifficultySlider
+            value={difficulty}
+            onChange={setDifficulty}
+            description="Measures how well you spot the real target and ignore distractors that try to pull your attention away."
+          />
           <div className="flex flex-wrap items-center gap-4">
             <button
               type="button"
